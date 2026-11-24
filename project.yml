@@ -1,0 +1,14 @@
+﻿name: DolphyApp
+options:
+  bundleIdPrefix: com.dolphy
+  deploymentTarget:
+    iOS: "15.0"
+targets:
+  DolphyApp:
+    type: application
+    platform: iOS
+    sources: [dolphy_app]
+    settings:
+      base:
+        INFOPLIST_FILE: dolphy_app/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.dolphy.app

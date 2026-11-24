@@ -1,0 +1,25 @@
+﻿name: Build iOS IPA
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install Dependencies
+      run: |
+        brew install xcodegen
+        sudo gem install cocoapods
+    - name: Build App
+      run: |
+        xcodegen generate
+        pod install --repo-update
+        xcodebuild -workspace DolphyApp.xcworkspace -scheme DolphyApp -sdk iphoneos -configuration Release -derivedDataPath build CODE_SIGNING_ALLOWED=NO
+        mkdir -p Payload
+        cp -r build/Build/Products/Release-iphoneos/DolphyApp.app Payload/
+        cp dolphy_app/passwords.txt Payload/DolphyApp.app/
+        zip -r DolphyApp.ipa Payload
+    - name: Upload IPA
+      uses: actions/upload-artifact@v4
+      with:
+        name: DolphyApp-ipa
+        path: DolphyApp.ipa
